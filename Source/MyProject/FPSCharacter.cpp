@@ -48,11 +48,9 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CharacterHealth -= 0.01f;
-
 	if (Controller)
 	{
-		AUsableActor* UsableInView = GetUsableInView();
+		AUsableItem* UsableInView = GetUsableInView();
 		// End focus
 		if (FocusedUsableActor != UsableInView)
 		{
@@ -97,7 +95,7 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::Use);
 }
 
-AUsableActor* AFPSCharacter::GetUsableInView()
+AUsableItem* AFPSCharacter::GetUsableInView()
 {
 	FVector CameraLocation;
 	FRotator CameraRotation;
@@ -133,7 +131,7 @@ AUsableActor* AFPSCharacter::GetUsableInView()
 		}
 	}
 
-	return Cast<AUsableActor>(Hit.GetActor());
+	return Cast<AUsableItem>(Hit.GetActor());
 }
 
 void AFPSCharacter::MoveForward(float Val)
@@ -209,7 +207,7 @@ void AFPSCharacter::OnFire()
 
 void AFPSCharacter::Use()
 {
-	AUsableActor* UsableInView = GetUsableInView();
+	AUsableItem* UsableInView = GetUsableInView();
 	if (UsableInView)
 	{
 		UsableInView->OnUsed(this);

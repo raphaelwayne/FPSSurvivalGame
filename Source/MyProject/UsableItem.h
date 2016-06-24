@@ -3,17 +3,17 @@
 #pragma once
 
 #include "Engine/StaticMeshActor.h"
-#include "UsableActor.generated.h"
+#include "UsableItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT_API AUsableActor : public AStaticMeshActor
+class MYPROJECT_API AUsableItem : public AStaticMeshActor
 {
 	GENERATED_BODY()
 
-	AUsableActor();
+		AUsableItem();
 	
 public:
 	/** Gets called when the Character calls the Use function */

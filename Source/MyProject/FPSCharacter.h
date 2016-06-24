@@ -3,7 +3,7 @@
 #pragma once
 
 #include "FPSProjectile.h"
-#include "UsableActor.h"
+#include "UsableItem.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
 
@@ -31,7 +31,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	/** Get actor derived from UsableActor currently looked at by the player */
-	class AUsableActor* GetUsableInView();
+	class AUsableItem* GetUsableInView();
 
 	/************************************************************************/
 	/*								Movement                                */
@@ -73,7 +73,7 @@ protected:
 	bool bHasNewFocus;
 
 	/* Actor currently in center view */
-	AUsableActor* FocusedUsableActor;
+	AUsableItem* FocusedUsableActor;
 
 private:
 	/* First person camera */
@@ -109,17 +109,33 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetCharacterHealth() const { return CharacterHealth; }
 
-	/** Public accessor for the  stomach space*/
+	/** Public setter for the character health */
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	void SetCharacterHealth(float NewCharacterHealth) { CharacterHealth = NewCharacterHealth; }
+
+	/** Public accessor for the  stomach space */
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetStomachSpace() const { return StomachSpace; }
+
+	/** Public setter for the  stomach space*/
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	void SetStomachSpace(float NewStomachSpace) { StomachSpace = NewStomachSpace; }
 
 	/** Public accessor for the character hunger */
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetCharacterHunger() const { return CharacterHunger; }
 
+	/** Public setter for the character hunger */
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	void SetCharacterHunger(float NewCharacterHunger) { CharacterHunger = NewCharacterHunger; }
+
 	/** Public accessor for the character thirst */
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetCharacterThirst() const { return CharacterThirst; }
+
+	/** Public setter for the character thirst */
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	void SetCharacterThirst(float NewCharacterThirst) { CharacterThirst = NewCharacterThirst; }
 
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
