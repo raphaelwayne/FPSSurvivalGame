@@ -11,19 +11,19 @@ AUsableActor::AUsableActor()
 	SetMobility(EComponentMobility::Movable);
 }
 
-void AUsableActor::OnUsed(ACharacter* Character)
+void AUsableActor::OnUsed_Implementation(ACharacter* Character)
 {
 	this->Destroy();
 	print(this->GetName() + " destroyed!");
 }
 
-void AUsableActor::StartFocusItem()
+void AUsableActor::StartFocusItem_Implementation()
 {
 	// Used by PostProcess to enable outlines
 	this->GetStaticMeshComponent()->SetRenderCustomDepth(true);
 }
 
-void AUsableActor::EndFocusItem()
+void AUsableActor::EndFocusItem_Implementation()
 {
 	// Used by PostProcess to enable outlines
 	this->GetStaticMeshComponent()->SetRenderCustomDepth(false);

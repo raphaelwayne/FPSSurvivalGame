@@ -4,6 +4,7 @@
 #include "FPSHUD.h"
 #include "FPSGameMode.h"
 #include "Engine.h"
+#include "Blueprint/UserWidget.h"
 
 AFPSGameMode::AFPSGameMode()
 {
@@ -21,6 +22,15 @@ void AFPSGameMode::BeginPlay()
 	// Call the parent's logic of BeginPlay, so it doesn't get left behind
 	Super::BeginPlay();
 	StartMatch();
+
+	if (HUDWidgetClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
+		if (CurrentWidget != nullptr)
+		{
+			CurrentWidget->AddToViewport();
+		}
+	}
 }
 
 

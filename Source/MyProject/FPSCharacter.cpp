@@ -30,6 +30,11 @@ AFPSCharacter::AFPSCharacter()
 	// Properties used for interacting with an UsableActor
 	MaxTraceDistance = 400.f;
 	bHasNewFocus = true;
+
+	CharacterHealth = 1.f;
+	StomachSpace = 1.f;
+	CharacterHunger = 0.5f;
+	CharacterThirst = 0.7f;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +47,8 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CharacterHealth -= 0.01f;
 
 	if (Controller)
 	{

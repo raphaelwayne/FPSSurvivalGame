@@ -84,7 +84,43 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
 	USkeletalMeshComponent* FirstPersonMesh;
 
+	/************************************************************************/
+	/*								Status                                  */
+	/************************************************************************/
+
+	/** Health of the Character, which is determined by the food/thirst level */
+	UPROPERTY(VisibleAnywhere, Category = "Status")
+	float CharacterHealth;
+
+	/** Stomach space which is filled with food */
+	UPROPERTY(VisibleAnywhere, Category = "Status")
+	float StomachSpace;
+
+	/** Food which fills up stomach space and hunger bar */
+	UPROPERTY(VisibleAnywhere, Category = "Status")
+	float CharacterHunger;
+
+	/** Food which fills up stomach space and thirst bar */
+	UPROPERTY(VisibleAnywhere, Category = "Status")
+	float CharacterThirst;
+
 public:
+	/** Public accessor for the character health */
+	UFUNCTION(BlueprintPure, Category = "Status")
+	float GetCharacterHealth() const { return CharacterHealth; }
+
+	/** Public accessor for the  stomach space*/
+	UFUNCTION(BlueprintPure, Category = "Status")
+	float GetStomachSpace() const { return StomachSpace; }
+
+	/** Public accessor for the character hunger */
+	UFUNCTION(BlueprintPure, Category = "Status")
+	float GetCharacterHunger() const { return CharacterHunger; }
+
+	/** Public accessor for the character thirst */
+	UFUNCTION(BlueprintPure, Category = "Status")
+	float GetCharacterThirst() const { return CharacterThirst; }
+
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
 	virtual void Use();

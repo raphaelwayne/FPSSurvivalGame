@@ -17,4 +17,13 @@ public:
 	AFPSGameMode();
 
 	virtual void BeginPlay() override;
+
+protected:
+	/** The widget class to use for the HUD */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Status", Meta = (BlueprintProtected = "true"))
+	TSubclassOf<class UUserWidget> HUDWidgetClass;
+
+	/** Instance of the HUD */
+	UPROPERTY()
+	class UUserWidget* CurrentWidget;
 };

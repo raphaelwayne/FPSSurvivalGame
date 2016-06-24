@@ -17,11 +17,14 @@ class MYPROJECT_API AUsableActor : public AStaticMeshActor
 	
 public:
 	/** Gets called when the Character calls the Use function */
-	virtual void OnUsed(ACharacter* Character);
+	UFUNCTION(BlueprintNativeEvent, Category = "Inventory")
+	void OnUsed(ACharacter* Character);
 
 	/** Gets called when the UsableActor is in the charaters' sight */
-	virtual void StartFocusItem();
+	UFUNCTION(BlueprintNativeEvent, Category = "Item")
+	void StartFocusItem();
 
 	/** Gets called when the UsableActor leaves the characters' sight */
-	virtual void EndFocusItem();
+	UFUNCTION(BlueprintNativeEvent, Category = "Item")
+	void EndFocusItem();
 };
