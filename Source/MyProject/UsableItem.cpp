@@ -13,18 +13,18 @@ AUsableItem::AUsableItem()
 
 void AUsableItem::OnUsed_Implementation(ACharacter* Character)
 {
-	this->Destroy();
-	print(this->GetName() + " destroyed!");
+	Destroy();
+	print(GetName() + " destroyed!");
 }
 
 void AUsableItem::StartFocusItem_Implementation()
 {
 	// Used by PostProcess to enable outlines
-	this->GetStaticMeshComponent()->SetRenderCustomDepth(true);
+	GetStaticMeshComponent()->SetRenderCustomDepth(true);
 }
 
 void AUsableItem::EndFocusItem_Implementation()
 {
 	// Used by PostProcess to enable outlines
-	this->GetStaticMeshComponent()->SetRenderCustomDepth(false);
+	GetStaticMeshComponent()->SetRenderCustomDepth(false);
 }

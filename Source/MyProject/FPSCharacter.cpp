@@ -3,8 +3,6 @@
 #include "MyProject.h"
 #include "FPSCharacter.h"
 
-#define print(DebugString) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Red, DebugString)
-
 // Sets default values
 AFPSCharacter::AFPSCharacter()
 {
@@ -35,6 +33,8 @@ AFPSCharacter::AFPSCharacter()
 	StomachSpace = 1.f;
 	CharacterHunger = 0.5f;
 	CharacterThirst = 0.7f;
+
+	CharacterInventory.SetNum(MaxInventorySlots);
 }
 
 // Called when the game starts or when spawned
@@ -92,7 +92,7 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 
 	// Gameplay
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnFire);
-	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::Use);
+	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::PickupItem);
 }
 
 AUsableItem* AFPSCharacter::GetUsableInView()
@@ -103,9 +103,9 @@ AUsableItem* AFPSCharacter::GetUsableInView()
 	bool bTraceFound;
 
 	// If we have no controller, we don't want our game to crash
-	if (Controller == NULL)
+	if (Controller == nullptr)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	// Returns the players point of view (mostly where the crosshair is located)
@@ -205,7 +205,7 @@ void AFPSCharacter::OnFire()
 	}
 }
 
-void AFPSCharacter::Use()
+void AFPSCharacter::PickupItem()
 {
 	AUsableItem* UsableInView = GetUsableInView();
 	if (UsableInView)

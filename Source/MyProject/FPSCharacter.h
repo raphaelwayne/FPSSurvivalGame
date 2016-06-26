@@ -4,8 +4,11 @@
 
 #include "FPSProjectile.h"
 #include "UsableItem.h"
+#include "InventoryItem.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
+
+#define print(DebugString) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Red, DebugString)
 
 UCLASS()
 class MYPROJECT_API AFPSCharacter : public ACharacter
@@ -13,7 +16,6 @@ class MYPROJECT_API AFPSCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-
 	/** Sets default values for this character's properties 
 	 *  The overloaded constructor here ensures, that each instance of the class gets constructed with initialized properties.
 	 */
@@ -25,8 +27,12 @@ public:
 	/** Called every frame */
 	virtual void Tick( float DeltaSeconds ) override;
 
-protected:
+	UPROPERTY(VisibleAnywhere)
+	TArray<AInventoryItem*> CharacterInventory;
 
+	const int32 MaxInventorySlots = 4;
+
+protected:
 	/** Called to bind functionality to input */
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
@@ -139,5 +145,5 @@ public:
 
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
-	virtual void Use();
+	virtual void PickupItem();
 };

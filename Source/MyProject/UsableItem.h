@@ -13,8 +13,13 @@ class MYPROJECT_API AUsableItem : public AStaticMeshActor
 {
 	GENERATED_BODY()
 
-		AUsableItem();
-	
+/* Member-Variables */
+
+
+/** Member-Functions */
+protected:
+	AUsableItem();
+
 public:
 	/** Gets called when the Character calls the Use function */
 	UFUNCTION(BlueprintNativeEvent, Category = "Inventory")
@@ -27,4 +32,5 @@ public:
 	/** Gets called when the UsableActor leaves the characters' sight */
 	UFUNCTION(BlueprintNativeEvent, Category = "Item")
 	void EndFocusItem();
+
 };
