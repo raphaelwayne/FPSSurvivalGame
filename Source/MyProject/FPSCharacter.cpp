@@ -48,8 +48,10 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// We control every tick if the player has focused on a new object or left the old object
 	if (Controller)
 	{
+		// Is there a UsableActor in the crosshair of a player ?
 		AUsableItem* UsableInView = GetUsableInView();
 		// End focus
 		if (FocusedUsableActor != UsableInView)
@@ -93,6 +95,7 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 	// Gameplay
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnFire);
 	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::PickupItem);
+	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFPSCharacter::ToggleInventoryVisibility);
 }
 
 AUsableItem* AFPSCharacter::GetUsableInView()
@@ -207,9 +210,32 @@ void AFPSCharacter::OnFire()
 
 void AFPSCharacter::PickupItem()
 {
-	AUsableItem* UsableInView = GetUsableInView();
-	if (UsableInView)
+	AInventoryItem* ItemInView = Cast<AInventoryItem>(GetUsableInView());
+	
+	if (ItemInView != nullptr)
 	{
-		UsableInView->OnUsed(this);
+		// Find a free slot in the inventory
+		int32 FreeSlot = CharacterInventory.Find(nullptr);
+
+		// Check if it exceeds the maximum storage, INDEX_NONE indicates that there is no nullptr in the array
+		if (FreeSlot != INDEX_NONE)
+		{
+			CharacterInventory[FreeSlot] = ItemInView;
+			ItemInView->OnUsed(this);
+		}
+		else
+		{
+			print("You can't carry any more items!");
+		}
+	}
+}
+
+void AFPSCharacter::ToggleInventoryVisibility()
+{
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
+	if (PlayerController)
+	{
+		print("Toggling inventory");
+		PlayerController->ToggleInventoryVisibility();
 	}
 }

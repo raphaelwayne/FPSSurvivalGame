@@ -13,7 +13,7 @@ AUsableItem::AUsableItem()
 
 void AUsableItem::OnUsed_Implementation(ACharacter* Character)
 {
-	Destroy();
+	GetStaticMeshComponent()->DestroyComponent();
 	print(GetName() + " destroyed!");
 }
 

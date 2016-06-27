@@ -5,6 +5,7 @@
 #include "FPSProjectile.h"
 #include "UsableItem.h"
 #include "InventoryItem.h"
+#include "MyPlayerController.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
 
@@ -145,5 +146,12 @@ public:
 
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
-	virtual void PickupItem();
+	void PickupItem();
+
+	/** Toggle the inventory hud */
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void ToggleInventoryVisibility();
+	
+	/** Return the characters current inventory */
+	TArray<AInventoryItem*> GetInventory() { return CharacterInventory; }
 };

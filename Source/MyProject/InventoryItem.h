@@ -17,7 +17,7 @@ class MYPROJECT_API AInventoryItem : public AUsableItem
 protected:
 	/* Our item needs a texture to display in the inventory */
 	UPROPERTY(EditAnywhere, Category = "InventoryItemProperties")
-	UTexture2D* InventoryDisplay;
+	UTexture2D* InventoryDisplayTexture;
 
 	/* Our item needs a name to be distinguishable from other items */
 	UPROPERTY(EditAnywhere, Category = "InventoryItemProperties")
@@ -27,4 +27,7 @@ protected:
 public:
 	/** Override the OnUsed function - use _Implementation because it's a BlueprintNativeEvent */
 	//void OnUsed_Implementation(ACharacter* Character) override;
+
+	/** Return the displayed item texture */
+	FORCEINLINE UTexture2D* GetInventoryDisplayTexture() const { return InventoryDisplayTexture; }
 };
