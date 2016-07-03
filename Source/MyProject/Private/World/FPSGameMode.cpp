@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyProject.h"
+#include "MyPlayerController.h"
 #include "FPSHUD.h"
 #include "FPSGameMode.h"
 #include "Engine.h"
@@ -15,6 +16,7 @@ AFPSGameMode::AFPSGameMode()
 	}
 
 	HUDClass = AFPSHUD::StaticClass();
+	PlayerControllerClass = AMyPlayerController::StaticClass();
 }
 
 void AFPSGameMode::BeginPlay()

@@ -3,11 +3,8 @@
 #pragma once
 
 #include "InventoryWidget.h"
-#include "FPSCharacter.h"
 #include "GameFramework/PlayerController.h"
 #include "MyPlayerController.generated.h"
-
-#define print(DebugString) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Yellow, DebugString)
 
 /**
  * 
@@ -38,6 +35,10 @@ public:
 	void BeginPlay() override;
 
 	/** Toggles the inventorywidget on demand of the player */
-	UFUNCTION()
 	void ToggleInventoryVisibility();
+
+	/** Add the picked up item to the right slot */
+	void AddItemToInventory();
+
+	void SetupInputComponent() override;
 };

@@ -32,5 +32,4 @@ public:
 	/** Gets called when the UsableActor leaves the characters' sight */
 	UFUNCTION(BlueprintNativeEvent, Category = "Item")
 	void EndFocusItem();
-
 };

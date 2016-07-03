@@ -2,3 +2,8 @@
 
 #include "MyProject.h"
 #include "InventoryWidget.h"
+
+void UInventoryWidget::MarkInventoryChanged()
+{
+	bIsInventoryChanged = true;
+}

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "ItemData.h"
 #include "UsableItem.h"
 #include "InventoryItem.generated.h"
 
@@ -14,20 +15,14 @@ class MYPROJECT_API AInventoryItem : public AUsableItem
 	GENERATED_BODY()
 	
 /* Member-Variables */	
-protected:
-	/* Our item needs a texture to display in the inventory */
-	UPROPERTY(EditAnywhere, Category = "InventoryItemProperties")
-	UTexture2D* InventoryDisplayTexture;
-
-	/* Our item needs a name to be distinguishable from other items */
-	UPROPERTY(EditAnywhere, Category = "InventoryItemProperties")
-	FString ItemName;
+public:
+	/* Neccessary item properties */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDisplayData")
+	FItemDisplayProperties ItemProperties;
 
 /** Member-Functions */
 public:
-	/** Override the OnUsed function - use _Implementation because it's a BlueprintNativeEvent */
-	//void OnUsed_Implementation(ACharacter* Character) override;
-
-	/** Return the displayed item texture */
-	FORCEINLINE UTexture2D* GetInventoryDisplayTexture() const { return InventoryDisplayTexture; }
+	/** Returns item properties as struct */
+	UFUNCTION()
+	FItemDisplayProperties GetItemProperties() { return ItemProperties; }
 };

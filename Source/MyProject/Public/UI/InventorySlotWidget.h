@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "InventoryItem.h"
 #include "Blueprint/UserWidget.h"
 #include "InventorySlotWidget.generated.h"
 
@@ -15,16 +14,15 @@ class MYPROJECT_API UInventorySlotWidget : public UUserWidget
 	GENERATED_BODY()
 
 /* Member-Variables */
-protected:
+public:
 	/* Holds the reference to the displayed item texture */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UTexture2D* ItemIcon;
 
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void SetEquippedItem();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Slot")
+	int32 SlotIndex;
 
 /** Member-Functions */
-public:
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void SetItemTexture(AInventoryItem* Item);
+	UFUNCTION(BlueprintCallable, Category = "Inventory Slot")
+	void SetItemTexture(UTexture2D* ItemTexture);
 };

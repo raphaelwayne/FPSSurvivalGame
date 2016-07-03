@@ -2,6 +2,9 @@
 
 #include "MyProject.h"
 #include "FPSCharacter.h"
+#include "InventoryItem.h"
+#include "InventoryComponent.h"
+#include "MyPlayerController.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -9,9 +12,12 @@ AFPSCharacter::AFPSCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Add the camera
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 
+	// Add the firstperson mesh
+	// Note: the thirdperson mesh for others to see is set in the BP_FPSCharacter
 	FirstPersonMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
 	FirstPersonMesh->SetupAttachment(FirstPersonCameraComponent);
 	// Only the player will see the mesh
@@ -25,6 +31,12 @@ AFPSCharacter::AFPSCharacter()
 	// Everyone but the player will see the regular body mesh
 	GetMesh()->SetOwnerNoSee(true);
 
+	// Add the inventory component
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	Inventory->bAutoRegister = true;
+	Inventory->bWantsInitializeComponent = true;
+	Inventory->Activate();
+
 	// Properties used for interacting with an UsableActor
 	MaxTraceDistance = 400.f;
 	bHasNewFocus = true;
@@ -33,8 +45,6 @@ AFPSCharacter::AFPSCharacter()
 	StomachSpace = 1.f;
 	CharacterHunger = 0.5f;
 	CharacterThirst = 0.7f;
-
-	CharacterInventory.SetNum(MaxInventorySlots);
 }
 
 // Called when the game starts or when spawned
@@ -95,7 +105,6 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 	// Gameplay
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnFire);
 	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::PickupItem);
-	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFPSCharacter::ToggleInventoryVisibility);
 }
 
 AUsableItem* AFPSCharacter::GetUsableInView()
@@ -211,31 +220,20 @@ void AFPSCharacter::OnFire()
 void AFPSCharacter::PickupItem()
 {
 	AInventoryItem* ItemInView = Cast<AInventoryItem>(GetUsableInView());
-	
+
 	if (ItemInView != nullptr)
 	{
-		// Find a free slot in the inventory
-		int32 FreeSlot = CharacterInventory.Find(nullptr);
-
-		// Check if it exceeds the maximum storage, INDEX_NONE indicates that there is no nullptr in the array
+		AMyPlayerController* OwningPawn = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		int32 FreeSlot = Inventory->GetItems().Find(nullptr);
 		if (FreeSlot != INDEX_NONE)
 		{
-			CharacterInventory[FreeSlot] = ItemInView;
+			Inventory->AddItem(ItemInView);
+			OwningPawn->AddItemToInventory();
 			ItemInView->OnUsed(this);
 		}
 		else
 		{
-			print("You can't carry any more items!");
+			UE_LOG(LogTemp, Error, TEXT("Cannot pick up more than %d Items!"), Inventory->MaxInventorySlots);
 		}
-	}
-}
-
-void AFPSCharacter::ToggleInventoryVisibility()
-{
-	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
-	if (PlayerController)
-	{
-		print("Toggling inventory");
-		PlayerController->ToggleInventoryVisibility();
 	}
 }

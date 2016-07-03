@@ -3,13 +3,8 @@
 #pragma once
 
 #include "FPSProjectile.h"
-#include "UsableItem.h"
-#include "InventoryItem.h"
-#include "MyPlayerController.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
-
-#define print(DebugString) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Red, DebugString)
 
 UCLASS()
 class MYPROJECT_API AFPSCharacter : public ACharacter
@@ -26,12 +21,11 @@ public:
 	virtual void BeginPlay() override;
 	
 	/** Called every frame */
-	virtual void Tick( float DeltaSeconds ) override;
+	virtual void Tick(float DeltaSeconds) override;
 
-	UPROPERTY(VisibleAnywhere)
-	TArray<AInventoryItem*> CharacterInventory;
-
-	const int32 MaxInventorySlots = 4;
+	/** Character owns the inventory component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	class UInventoryComponent* Inventory;
 
 protected:
 	/** Called to bind functionality to input */
@@ -80,7 +74,7 @@ protected:
 	bool bHasNewFocus;
 
 	/* Actor currently in center view */
-	AUsableItem* FocusedUsableActor;
+	class AUsableItem* FocusedUsableActor;
 
 private:
 	/* First person camera */
@@ -147,11 +141,4 @@ public:
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
 	void PickupItem();
-
-	/** Toggle the inventory hud */
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void ToggleInventoryVisibility();
-	
-	/** Return the characters current inventory */
-	TArray<AInventoryItem*> GetInventory() { return CharacterInventory; }
 };

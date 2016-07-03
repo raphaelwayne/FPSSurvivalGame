@@ -10,26 +10,39 @@ void AMyPlayerController::BeginPlay()
 	if (InventoryHUD)
 	{
 		InventoryWidget = CreateWidget<UInventoryWidget>(this, InventoryHUD);
+		InventoryWidget->AddToViewport();
+		// Inventory should not be hidden at start
+		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
 void AMyPlayerController::ToggleInventoryVisibility()
 {
-	AFPSCharacter* MyCharacter = Cast<AFPSCharacter>(GetPawn());
 	if (InventoryWidget)
 	{
 		if (bIsInventoryShowing)
 		{
 			// Inventory is showing
-			bIsInventoryShowing = false;
-			InventoryWidget->RemoveFromViewport();
+			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
 		else 
 		{
 			// Inventory is hidden
-			bIsInventoryShowing = true;
-			InventoryWidget->ItemsArray = MyCharacter->GetInventory();
-			InventoryWidget->Show();
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
+		// Toggle between the visibility states of the inventory HUD
+		bIsInventoryShowing = !bIsInventoryShowing;
 	}
+}
+
+void AMyPlayerController::AddItemToInventory()
+{
+	InventoryWidget->OnInventoryChanged();
+}
+
+void AMyPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AMyPlayerController::ToggleInventoryVisibility);
 }

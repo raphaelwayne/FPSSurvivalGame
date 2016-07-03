@@ -13,19 +13,17 @@ UCLASS()
 class MYPROJECT_API UInventoryWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 	/* Member-Variables */
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<AInventoryItem*> ItemsArray;
+private:
+	/* Marks the inventory as changed */
+	bool bIsInventoryChanged;
 
 	/** Member-Functions */
 public:
-	/*Adds the widget into the viewport and populates the inventory slots*/
-	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
-	void Show();
+	/** Gets called when something in the inventory changed. Updates the grid with icons, etc.  */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory Events")
+	void OnInventoryChanged();
 
-	/** Removes the widget from the viewport */
-	//UFUNCTION(BlueprintImplementableEvent, Category = "UI")
-	//void Hide();
+	void MarkInventoryChanged();
 };
