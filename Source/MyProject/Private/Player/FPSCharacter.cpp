@@ -45,6 +45,12 @@ AFPSCharacter::AFPSCharacter()
 	StomachSpace = 1.f;
 	CharacterHunger = 0.5f;
 	CharacterThirst = 0.7f;
+
+	//1 means normal mouse input
+	n8MouseInvertion = 1;
+	fMouseSensivity = 200.f;
+
+	bCameraMovementEnabled = true;
 }
 
 // Called when the game starts or when spawned
@@ -97,8 +103,10 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 	// Movement
 	InputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
-	InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	//InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	//InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	InputComponent->BindAxis("Turn", this, &AFPSCharacter::CameraYaw);
+	InputComponent->BindAxis("LookUp", this, &AFPSCharacter::CameraPitch);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AFPSCharacter::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::OnStopJump);
 
@@ -180,6 +188,22 @@ void AFPSCharacter::OnStartJump()
 void AFPSCharacter::OnStopJump()
 {
 	bPressedJump = false;
+}
+
+void AFPSCharacter::CameraYaw(float fAmount)
+{
+	if (bCameraMovementEnabled)
+		AddControllerYawInput(fMouseSensivity * fAmount * GetWorld()->GetDeltaSeconds());
+	else
+		AddControllerYawInput(0.f);
+}
+
+void AFPSCharacter::CameraPitch(float fAmount)
+{
+	if (bCameraMovementEnabled)
+		AddControllerPitchInput(n8MouseInvertion * fMouseSensivity * fAmount * GetWorld()->GetDeltaSeconds());
+	else 
+		AddControllerPitchInput(0.f);
 }
 
 void AFPSCharacter::OnFire()

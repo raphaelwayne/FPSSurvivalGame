@@ -16,11 +16,18 @@ class MYPROJECT_API UInventoryWidget : public UUserWidget
 
 	/* Member-Variables */
 private:
-	/* Marks the inventory as changed */
 	bool bIsInventoryChanged;
 
-	/** Member-Functions */
 public:
+	UPROPERTY(BlueprintReadWrite)
+	ESlateVisibility ActionMenuVisibility;
+
+	/* Item name will be neccessary to change action text depending on item (i mainly need it to bind it to the text) */
+	UPROPERTY(BlueprintReadWrite)
+	FString ItemName;
+
+	/** Member-Functions */
+
 	/** Gets called when something in the inventory changed. Updates the grid with icons, etc.  */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory Events")
 	void OnInventoryChanged();

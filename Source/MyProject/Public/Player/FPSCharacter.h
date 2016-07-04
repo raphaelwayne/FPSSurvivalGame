@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
 	class UInventoryComponent* Inventory;
 
+	/* Defines the players restriction to move the camera with his mouse */
+	bool bCameraMovementEnabled;
+
 protected:
 	/** Called to bind functionality to input */
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -49,6 +52,13 @@ protected:
 
 	/** Clear jumpflag */
 	void OnStopJump();
+
+	/*  */
+	UFUNCTION()
+	void CameraYaw(float fAmount);
+
+	UFUNCTION()
+	void CameraPitch(float fAmount);
 
 	/************************************************************************/
 	/*								Gameplay                                */
@@ -104,6 +114,14 @@ private:
 	/** Food which fills up stomach space and thirst bar */
 	UPROPERTY(VisibleAnywhere, Category = "Status")
 	float CharacterThirst;
+
+	/* Multiplier of the mouse movement */
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+	float fMouseSensivity;
+
+	/* Invertion of the mouse/camera pitch: mouse up = camera down, mouse down = camera up */
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+	int8 n8MouseInvertion;
 
 public:
 	/** Public accessor for the character health */
