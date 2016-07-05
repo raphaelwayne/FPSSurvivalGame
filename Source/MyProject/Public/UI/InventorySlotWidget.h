@@ -19,10 +19,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UTexture2D* ItemIcon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Slot")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Functions")
 	int32 SlotIndex;
 
 /** Member-Functions */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Slot")
+	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
 	void SetItemTexture(UTexture2D* ItemTexture);
 };

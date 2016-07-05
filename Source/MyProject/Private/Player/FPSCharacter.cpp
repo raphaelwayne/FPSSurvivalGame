@@ -48,7 +48,7 @@ AFPSCharacter::AFPSCharacter()
 
 	//1 means normal mouse input
 	n8MouseInvertion = 1;
-	fMouseSensivity = 200.f;
+	fMouseSensivity = 80.0f;
 
 	bCameraMovementEnabled = true;
 }

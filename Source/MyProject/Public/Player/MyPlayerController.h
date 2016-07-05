@@ -26,6 +26,12 @@ protected:
 	class UInventoryWidget* InventoryWidget;
 
 private:
+	/* Controller and UI can control input */
+	FInputModeGameOnly InputGameMode;
+
+	/* UI can control input */
+	FInputModeGameAndUI UiGameInputMode;
+
 	/* Determine if inventorytoggle should show or hide the widget */
 	bool bIsInventoryShowing;
 
@@ -36,6 +42,9 @@ public:
 
 	/** Toggles the inventorywidget on demand of the player */
 	void ToggleInventoryVisibility();
+
+	/** Right mouse button click event */
+	void RighMouseButtonClicked();
 
 	/** Add the picked up item to the right slot */
 	void AddItemToInventory();
