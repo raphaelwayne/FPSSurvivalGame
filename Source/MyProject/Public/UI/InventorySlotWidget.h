@@ -1,7 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016, raphaelwayne
 
 #pragma once
 
+#include "InventoryItem.h"
 #include "Blueprint/UserWidget.h"
 #include "InventorySlotWidget.generated.h"
 
@@ -24,5 +25,5 @@ public:
 
 /** Member-Functions */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
-	void SetItemTexture(UTexture2D* ItemTexture);
+	void SetItemTexture(AInventoryItem* Item);
 };

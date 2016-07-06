@@ -1,9 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016, raphaelwayne
 
 #include "MyProject.h"
 #include "InventorySlotWidget.h"
 
-void UInventorySlotWidget::SetItemTexture(UTexture2D* ItemTexture)
+void UInventorySlotWidget::SetItemTexture(AInventoryItem* Item)
 {
-	ItemIcon = ItemTexture;
+	(Item != nullptr) ? ItemIcon = Item->GetItemProperties().DisplayTexture : ItemIcon = nullptr;
 }

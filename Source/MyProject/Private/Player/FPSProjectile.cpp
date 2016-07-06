@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016, raphaelwayne
 
 #include "MyProject.h"
 #include "FPSProjectile.h"
@@ -35,7 +35,7 @@ AFPSProjectile::AFPSProjectile()
 	ProjectileMovement->UpdatedComponent = CollisionComp;
 	// Set attributes of the ProjectileMovement
 	ProjectileMovement->InitialSpeed = 3000.f;
-	ProjectileMovement->MaxSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 10000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 	ProjectileMovement->Bounciness = 0.3f;
@@ -60,7 +60,7 @@ void AFPSProjectile::InitVelocity(const FVector& ShootDirection)
 	if (ProjectileMovement != NULL)
 	{
 		// Set the projectile velocity to the desired direction
-		ProjectileMovement->Velocity = ShootDirection * ProjectileMovement->InitialSpeed;
+		ProjectileMovement->Velocity = ShootDirection * ProjectileMovement->MaxSpeed;
 	}
 }
 

@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016, raphaelwayne
 
 #pragma once
 
 #include "FPSProjectile.h"
+#include "InventoryComponent.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
 
@@ -25,7 +26,7 @@ public:
 
 	/** Character owns the inventory component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
-	class UInventoryComponent* Inventory;
+	UInventoryComponent* Inventory;
 
 	/* Defines the players restriction to move the camera with his mouse */
 	bool bCameraMovementEnabled;
@@ -85,6 +86,14 @@ protected:
 
 	/* Actor currently in center view */
 	class AUsableItem* FocusedUsableActor;
+
+	/* Sound to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	USoundBase* FireSound;
+
+	/* AnimMontage to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UAnimMontage* FireAnimation;
 
 private:
 	/* First person camera */

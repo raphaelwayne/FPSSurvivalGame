@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016, raphaelwayne
 
 #pragma once
 
@@ -25,7 +25,7 @@ public:
 
 	/** Member-Functions */
 	/** Gets called when something in the inventory changed. Updates the grid with icons, etc.  */
-	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory Events")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Inventory Events")
 	void OnInventoryChanged();
 
 	/** Gets called when the inventory is open */
@@ -35,4 +35,7 @@ public:
 	void MarkInventoryChanged();
 
 	void ToggleInventoryVisibility(bool bIsVisible);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
+	void SetToNullptr(class AInventoryItem* Item) { Item = nullptr; }
 };
