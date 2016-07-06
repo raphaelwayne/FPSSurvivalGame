@@ -39,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	TArray<AInventoryItem*> GetItems() { return Items; }
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
+	void SetToNullptr(int32 SlotIndex) { Items[SlotIndex] = nullptr; }
 };
