@@ -41,5 +41,8 @@ public:
 	TArray<AInventoryItem*> GetItems() { return Items; }
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
-	void SetToNullptr(int32 SlotIndex) { Items[SlotIndex] = nullptr; }
+	void SetToNullptr(int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Functions")
+	void DropItem(int32 SlotIndex);
 };

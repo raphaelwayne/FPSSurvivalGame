@@ -57,3 +57,27 @@ FItemDisplayProperties UInventoryComponent::GetDataFromSlot(int32 ItemSlot)
 	
 	return Items[ItemSlot]->GetItemProperties();
 }
+
+void UInventoryComponent::SetToNullptr(int32 SlotIndex)
+{
+	Items[SlotIndex] = nullptr;
+}
+
+void UInventoryComponent::DropItem(int32 SlotIndex)
+{
+	if (Items[SlotIndex])
+	{
+		// Drop the item in front of the player
+		FVector DropLocation = GetOwner()->GetActorLocation() + (GetOwner()->GetActorForwardVector() * 200.f);
+		FTransform DropTransform;
+		DropTransform.SetLocation(DropLocation);
+		
+		FActorSpawnParameters DropParams;
+		AInventoryItem* DroppedItem = GetWorld()->SpawnActor<AInventoryItem>(Items[SlotIndex]->GetClass(), DropTransform, DropParams);
+
+		if (DroppedItem)
+		{
+			SetToNullptr(SlotIndex);
+		}
+	}
+}

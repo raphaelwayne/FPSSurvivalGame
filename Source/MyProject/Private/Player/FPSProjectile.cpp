@@ -38,7 +38,7 @@ AFPSProjectile::AFPSProjectile()
 	ProjectileMovement->MaxSpeed = 10000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
-	ProjectileMovement->Bounciness = 0.3f;
+	ProjectileMovement->Bounciness = 0.1f;
 }
 
 // Called when the game starts or when spawned
