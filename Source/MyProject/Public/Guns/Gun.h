@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Items/UsableItem.h"
-#include "IGun.generated.h"
+#include "Gun.generated.h"
 
 USTRUCT()
 struct FWeaponData
@@ -21,7 +21,7 @@ struct FWeaponData
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Ammo")
 	int32 InitialClips;
 
-	/* Delay between shots */
+	/* Shots per second */
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Ammo")
 	float FireRate;
 
@@ -76,11 +76,25 @@ struct FWeaponSound
 	USoundBase* FireSingleSound3P;
 };
 
+enum class EWeaponState
+{
+	Idle,
+	Firing,
+	Reloading,
+	Equipping,
+};
+
+enum class EFireMode
+{
+	Automatic,
+	Burst,
+	Single
+};
+
 UCLASS(Abstract, Blueprintable)
-class MYPROJECT_API AIGun : public AActor
+class MYPROJECT_API AGun : public AActor
 {
 	GENERATED_BODY()
-	
 	
 	/* Member-Variables */
 protected:
@@ -94,21 +108,6 @@ protected:
 	/* Player currently owning this weapon */
 	class AFPSCharacter* OwningPawn;
 
-	enum class WeaponState
-	{
-		Idle,
-		Firing,
-		Reloading,
-		Equipping,
-	};
-
-	enum class FireMode
-	{
-		Automatic,
-		Burst,
-		Single
-	};
-
 	/* If i would make this boolean, i would assign 1 byte to each boolean. Since this class will have a lot of this, i can save some space by creating bit fields of "uint32 booleans" */
 	uint32 bIsFiring : 1;
 	
@@ -118,9 +117,9 @@ protected:
 
 	uint32 bIsEquipped : 1;
 
-	WeaponState CurrentType;
+	EWeaponState CurrentState;
 
-	FireMode CurrentMode;
+	EFireMode CurrentMode;
 
 private:
 	/* Mesh first person */
@@ -133,5 +132,13 @@ private:
 
 	/** Member-Functions */
 public:
+	/* Return current firemode of weapon */
+	EFireMode GetCurrentMode() const;
+
+	/* Return current state of weapon */
+	EWeaponState GetCurrentState() const;
+
+	/* Return owner of the weapon */
+	class AFPSCharacter* GetOwningPLayer() const;
 
 };

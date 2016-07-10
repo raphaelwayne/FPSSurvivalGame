@@ -224,7 +224,7 @@ void AFPSCharacter::CameraPitch(float fAmount)
 void AFPSCharacter::OnFire()
 {
 	// Check if there is a projectile to shoot
-	if (ProjectileClass != NULL)
+	if (CurrentGun && ProjectileClass)
 	{
 		// Get the camera transformations
 		FVector CameraLoc;

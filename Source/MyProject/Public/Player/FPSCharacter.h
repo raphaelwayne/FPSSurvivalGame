@@ -97,7 +97,7 @@ protected:
 
 	/* Currently gun in hands */
 	UPROPERTY(EditDefaultsOnly, Category = "Player Gun")
-	class AIGun* CurrentGun;
+	class AGun* CurrentGun;
 
 private:
 	/* First person camera */
