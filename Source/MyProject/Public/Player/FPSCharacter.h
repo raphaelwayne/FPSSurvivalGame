@@ -95,6 +95,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	UAnimMontage* FireAnimation;
 
+	/* Currently gun in hands */
+	UPROPERTY(EditDefaultsOnly, Category = "Player Gun")
+	class AIGun* CurrentGun;
+
 private:
 	/* First person camera */
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
