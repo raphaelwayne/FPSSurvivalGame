@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include "Engine/StaticMeshActor.h"
+#include "GameFramework/Actor.h"
 #include "UsableItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT_API AUsableItem : public AStaticMeshActor
+class MYPROJECT_API AUsableItem : public AActor
 {
 	GENERATED_BODY()
 
@@ -17,10 +17,9 @@ class MYPROJECT_API AUsableItem : public AStaticMeshActor
 
 
 /** Member-Functions */
-protected:
+public:
 	AUsableItem();
 
-public:
 	/** Gets called when the Character calls the Use function */
 	UFUNCTION(BlueprintNativeEvent, Category = "Inventory")
 	void OnUsed(ACharacter* Character);

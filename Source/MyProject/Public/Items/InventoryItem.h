@@ -20,9 +20,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDisplayData")
 	FItemDisplayProperties ItemProperties;
 
+	UPROPERTY(VisibleAnywhere, Category = "ItemMesh")
+	UStaticMeshComponent* PickupMesh;
+
 /** Member-Functions */
 public:
+	AInventoryItem();
+
 	/** Returns item properties as struct */
 	UFUNCTION()
 	FItemDisplayProperties GetItemProperties() { return ItemProperties; }
+
+	/** Gets called when the Character calls the Use function */
+	void OnUsed_Implementation(ACharacter* Character) override;
+
+	/** Gets called when the UsableActor is in the charaters' sight */
+	void StartFocusItem_Implementation() override;
+
+	/** Gets called when the UsableActor leaves the characters' sight */
+	void EndFocusItem_Implementation() override;
 };

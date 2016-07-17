@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "FPSProjectile.h"
 #include "InventoryComponent.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
@@ -19,21 +18,25 @@ public:
 	AFPSCharacter();
 
 	/** Called when the game starts or when spawned */
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 	
 	/** Called every frame */
-	virtual void Tick(float DeltaSeconds) override;
+	void Tick(float DeltaSeconds) override;
 
 	/** Character owns the inventory component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
 	UInventoryComponent* Inventory;
+
+	/* Current gun in hands */
+	UPROPERTY(EditDefaultsOnly, Category = "Player Gun")
+	class AGun* CurrentWeapon;
 
 	/* Defines the players restriction to move the camera with his mouse */
 	bool bCameraMovementEnabled;
 
 protected:
 	/** Called to bind functionality to input */
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	/** Get actor derived from UsableActor currently looked at by the player */
 	class AUsableItem* GetUsableInView();
@@ -65,39 +68,24 @@ protected:
 	/*								Gameplay                                */
 	/************************************************************************/
 
-	/** Handles firing */
-	UFUNCTION()
-	void OnFire();
+	/** Player pressed startfire action */
+	void OnStartFire();
 
-	/* Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	TSubclassOf<class AFPSProjectile> ProjectileClass;
-
-	/* Gun muzzle's offset from the FPSCamera */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
-	FVector MuzzleOffset;
+	/** Player released startfire action */
+	void OnStopFire();
 
 	/* Max distance to use the UsableActor */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
-	float MaxTraceDistance;	
+	float MaxTraceDistance;
 
 	/* Only true in first frame when focused on new UsableActor*/
 	bool bHasNewFocus;
 
+	/* True when player called fire action */
+	bool bWantsToFire;
+
 	/* Actor currently in center view */
 	class AUsableItem* FocusedUsableActor;
-
-	/* Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	USoundBase* FireSound;
-
-	/* AnimMontage to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
-
-	/* Currently gun in hands */
-	UPROPERTY(EditDefaultsOnly, Category = "Player Gun")
-	class AGun* CurrentGun;
 
 private:
 	/* First person camera */
@@ -172,4 +160,7 @@ public:
 	/** Use the UsableActor currently in view */
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
 	void PickupItem();
+
+	/* Returns true when player is currently firing a gun */
+	bool IsFiring() const;
 };

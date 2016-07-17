@@ -4,6 +4,11 @@
 #include "MyPlayerController.h"
 #include "FPSCharacter.h"
 
+AMyPlayerController::AMyPlayerController()
+{
+	bAllowGameActions = true;
+}
+
 void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -60,4 +65,9 @@ void AMyPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AMyPlayerController::ToggleInventoryVisibility);
 	InputComponent->BindAction("RightMouseButtonClicked", IE_Pressed, this, &AMyPlayerController::RighMouseButtonClicked);
+}
+
+bool AMyPlayerController::IsGameActionAllowed()
+{
+	return bAllowGameActions;
 }

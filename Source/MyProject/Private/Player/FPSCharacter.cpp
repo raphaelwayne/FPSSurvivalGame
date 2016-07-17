@@ -5,6 +5,7 @@
 #include "InventoryItem.h"
 #include "InventoryComponent.h"
 #include "MyPlayerController.h"
+#include "Gun.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -51,27 +52,17 @@ AFPSCharacter::AFPSCharacter()
 	fMouseSensivity = 80.0f;
 
 	bCameraMovementEnabled = true;
-	/*
-	// Create a gun mesh component
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
-	FP_Gun->bCastDynamicShadow = false;
-	FP_Gun->CastShadow = false;
-	// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
-
-	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(FP_Gun);
-	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
-
-	// Default offset from the character location for projectiles to spawn
-	GunOffset = FVector(100.0f, 30.0f, 10.0f);
-	*/
+	bWantsToFire = false;
 }
 
 // Called when the game starts or when spawned
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->SetOwningPlayer(this);
+	}
 }
 
 // Called every frame
@@ -126,7 +117,8 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 	InputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::OnStopJump);
 
 	// Gameplay
-	InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnFire);
+	InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnStartFire);
+	InputComponent->BindAction("Fire", IE_Released, this, &AFPSCharacter::OnStopFire);
 	InputComponent->BindAction("Use", IE_Pressed, this, &AFPSCharacter::PickupItem);
 }
 
@@ -221,55 +213,25 @@ void AFPSCharacter::CameraPitch(float fAmount)
 		AddControllerPitchInput(0.f);
 }
 
-void AFPSCharacter::OnFire()
+void AFPSCharacter::OnStartFire()
 {
-	// Check if there is a projectile to shoot
-	if (CurrentGun && ProjectileClass)
+	AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (MyPlayerController && MyPlayerController->IsGameActionAllowed())
 	{
-		// Get the camera transformations
-		FVector CameraLoc;
-		FRotator CameraRot;
-		GetActorEyesViewPoint(CameraLoc, CameraRot);
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting 
-		// from the camera to find the final muzzle position
-		FVector const MuzzleLocation = CameraLoc + FTransform(CameraRot).TransformVector(MuzzleOffset);
-		FRotator MuzzleRotation = CameraRot;
-		// Skew the aim a bit upwards
-		MuzzleRotation.Pitch += 10.f;
-		UWorld* const World = GetWorld();
-		if (World)
+		bWantsToFire = true;
+		if (CurrentWeapon && bWantsToFire)
 		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = Instigator;
-			// Spawn the projectile at the muzzle
-			AFPSProjectile* const Projectile = World->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
-			
-			// Check if projectile really succeeded spawning
-			if (Projectile != nullptr)
-			{
-				// Find the launch direction
-				FVector const LaunchDir = MuzzleRotation.Vector();
-				Projectile->InitVelocity(LaunchDir);
-			}
+			CurrentWeapon->StartWeaponFire();
 		}
 	}
+}
 
-	// try and play the sound if specified
-	if (FireSound != NULL)
+void AFPSCharacter::OnStopFire()
+{
+	bWantsToFire = false;
+	if (CurrentWeapon && !bWantsToFire)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// try and play a firing animation if specified
-	if (FireAnimation != NULL)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = FirstPersonMesh->GetAnimInstance();
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
+		CurrentWeapon->StopWeaponFire();
 	}
 }
 
@@ -279,12 +241,12 @@ void AFPSCharacter::PickupItem()
 
 	if (ItemInView != nullptr)
 	{
-		AMyPlayerController* OwningPawn = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 		int32 FreeSlot = Inventory->GetItems().Find(nullptr);
 		if (FreeSlot != INDEX_NONE)
 		{
 			Inventory->AddItem(ItemInView);
-			OwningPawn->AddItemToInventory();
+			MyPlayerController->AddItemToInventory();
 			ItemInView->OnUsed(this);
 		}
 		else
@@ -292,4 +254,9 @@ void AFPSCharacter::PickupItem()
 			UE_LOG(LogTemp, Error, TEXT("Cannot pick up more than %d Items!"), Inventory->MaxInventorySlots);
 		}
 	}
+}
+
+bool AFPSCharacter::IsFiring() const
+{
+	return bWantsToFire;
 }

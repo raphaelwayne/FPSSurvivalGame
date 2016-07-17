@@ -14,7 +14,6 @@ class MYPROJECT_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	
 	/* Member-Variables */
 protected:
 	/** The widget class to use for the HUD */
@@ -24,6 +23,9 @@ protected:
 	/** Instance of the HUD */
 	UPROPERTY()
 	class UInventoryWidget* InventoryWidget;
+
+	/* If true, input game actions are allowed */
+	bool bAllowGameActions;
 
 private:
 	/* Controller and UI can control input */
@@ -37,6 +39,8 @@ private:
 
 	/** Member-Functions */
 public:
+	AMyPlayerController();
+
 	/** We have to override the BeginPlay function to implement own behaviour */
 	void BeginPlay() override;
 
@@ -50,4 +54,7 @@ public:
 	void AddItemToInventory();
 
 	void SetupInputComponent() override;
+
+	/** Returns true when player is allowed to do something game input actions related */
+	bool IsGameActionAllowed();
 };
