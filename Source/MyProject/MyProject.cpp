@@ -5,7 +5,7 @@
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, MyProject, "MyProject" );
 
 // Logging for guns
-DEFINE_LOG_CATEGORY(Guns);
+DEFINE_LOG_CATEGORY(GunLog);
 
 // Logging for items
-DEFINE_LOG_CATEGORY(Items);
+DEFINE_LOG_CATEGORY(ItemLog);

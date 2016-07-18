@@ -87,6 +87,9 @@ protected:
 	/* Actor currently in center view */
 	class AUsableItem* FocusedUsableActor;
 
+	/* Check if the character has an equipped gun*/
+	bool HasWeaponEquipped();
+
 private:
 	/* First person camera */
 	UPROPERTY(VisibleAnywhere, Category = "Camera")

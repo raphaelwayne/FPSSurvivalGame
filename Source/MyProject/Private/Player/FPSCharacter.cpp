@@ -235,23 +235,49 @@ void AFPSCharacter::OnStopFire()
 	}
 }
 
+bool AFPSCharacter::HasWeaponEquipped()
+{
+	return CurrentWeapon != nullptr;
+}
+
 void AFPSCharacter::PickupItem()
 {
-	AInventoryItem* ItemInView = Cast<AInventoryItem>(GetUsableInView());
+	AUsableItem* UsableInView = Cast<AUsableItem>(GetUsableInView());
 
-	if (ItemInView != nullptr)
+	if (UsableInView != nullptr)
 	{
-		AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		int32 FreeSlot = Inventory->GetItems().Find(nullptr);
-		if (FreeSlot != INDEX_NONE)
+		// The item is a inventory item
+		if (UsableInView->IsA(AInventoryItem::StaticClass()))
 		{
-			Inventory->AddItem(ItemInView);
-			MyPlayerController->AddItemToInventory();
-			ItemInView->OnUsed(this);
+			AInventoryItem* ItemInView = Cast<AInventoryItem>(UsableInView);
+			AMyPlayerController* MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+			int32 FreeSlot = Inventory->GetItems().Find(nullptr);
+			if (FreeSlot != INDEX_NONE)
+			{
+				Inventory->AddItem(ItemInView);
+				MyPlayerController->AddItemToInventory();
+				ItemInView->OnUsed(this);
+			}
+			else
+			{
+				UE_LOG(ItemLog, Error, TEXT("Cannot pick up more than %d Items!"), Inventory->MaxInventorySlots);
+			}
 		}
-		else
+
+		// The item is a gun
+		if (UsableInView->IsA(AGun::StaticClass()))
 		{
-			UE_LOG(LogTemp, Error, TEXT("Cannot pick up more than %d Items!"), Inventory->MaxInventorySlots);
+			// check if character has a equipped gun
+			if (HasWeaponEquipped())
+			{
+				UE_LOG(GunLog, Log, TEXT("Weapon %s already equipped."), *CurrentWeapon->GetName());
+			}
+			else
+			{
+				AGun* WeaponInView = Cast<AGun>(UsableInView);
+				CurrentWeapon = WeaponInView;
+				UE_LOG(GunLog, Log, TEXT("Character has picked up %s"), *CurrentWeapon->GetName());
+			}
 		}
 	}
 }

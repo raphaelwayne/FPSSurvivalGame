@@ -21,13 +21,13 @@ int32 UInventoryComponent::AddItem(AInventoryItem* Item)
 	// No empty slot was found or the index is out of range
 	if (FreeSlot == -1)
 	{
-		UE_LOG(LogTemp, Error, TEXT("No available slot found!"));
+		UE_LOG(ItemLog, Warning, TEXT("No available slot found!"));
 		return -1;
 	}
 
 	Items[FreeSlot] = Item;
 	Item->ItemProperties.SlotIndex = FreeSlot;
-	UE_LOG(LogTemp, Warning, TEXT("Item %s was picked up."), *Items[FreeSlot]->GetItemProperties().ItemName);
+	UE_LOG(ItemLog, Log, TEXT("Item %s was picked up."), *Items[FreeSlot]->GetItemProperties().ItemName);
 	return Item->GetItemProperties().SlotIndex;
 }
 

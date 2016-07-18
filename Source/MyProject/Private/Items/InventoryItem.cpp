@@ -12,7 +12,7 @@ AInventoryItem::AInventoryItem()
 
 void AInventoryItem::OnUsed_Implementation(ACharacter* Character)
 {
-	UE_LOG(Items, Log, TEXT("Item %s got picked up!"), *GetName());
+	UE_LOG(ItemLog, Log, TEXT("Item %s got picked up!"), *GetName());
 	PickupMesh->DestroyComponent();
 }
 

@@ -19,6 +19,8 @@ AGun::AGun()
 
 	Mesh3P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh3P"));
 	Mesh3P->CastShadow = true;
+	Mesh3P->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Mesh3P->SetSimulatePhysics(true);
 	Mesh3P->SetupAttachment(Mesh1P);
 
 	CurrentState = EWeaponState::Idle;
@@ -103,7 +105,8 @@ void AGun::StopWeaponFire()
 
 void AGun::OnUsed_Implementation(ACharacter* Character)
 {
-	UE_LOG(Guns, Log, TEXT("Weapon %s got picked up!"), *GetName());
+	UE_LOG(GunLog, Log, TEXT("Weapon %s got picked up!"), *GetName());
+	Mesh3P->DestroyComponent();
 }
 
 void AGun::StartFocusItem_Implementation()

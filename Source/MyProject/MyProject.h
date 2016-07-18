@@ -5,7 +5,7 @@
 #include "Engine.h"
 
 // Logging for guns
-DECLARE_LOG_CATEGORY_EXTERN(Guns, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(GunLog, Log, All);
 
 // Logging for items
-DECLARE_LOG_CATEGORY_EXTERN(Items, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(ItemLog, Log, All);
