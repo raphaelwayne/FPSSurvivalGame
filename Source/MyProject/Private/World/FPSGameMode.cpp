@@ -9,7 +9,7 @@
 
 AFPSGameMode::AFPSGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnObject(TEXT("/Game/Blueprints/BP_FPSCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnObject(TEXT("/Game/Blueprints/Character/BP_FPSCharacter"));
 	if(PlayerPawnObject.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnObject.Class;

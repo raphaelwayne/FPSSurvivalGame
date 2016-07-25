@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "InventoryComponent.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
 
@@ -25,11 +24,19 @@ public:
 
 	/** Character owns the inventory component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
-	UInventoryComponent* Inventory;
+	class UInventoryComponent* Inventory;
+
+	/* Current primary gun in hands */
+	UPROPERTY(EditDefaultsOnly, Category = "Player Weapons")
+	class AGun* CurrentGun;
+
+	/* Current primary gun in hands */
+	//UPROPERTY(EditDefaultsOnly, Category = "Player Weapons")
+	//AGun* CurrentGunPrimary;
 
 	/* Current gun in hands */
-	UPROPERTY(EditDefaultsOnly, Category = "Player Gun")
-	class AGun* CurrentWeapon;
+	//UPROPERTY(EditDefaultsOnly, Category = "Player Weapons")
+	//AGun* CurrentGunSecondary;
 
 	/* Defines the players restriction to move the camera with his mouse */
 	bool bCameraMovementEnabled;
@@ -86,9 +93,6 @@ protected:
 
 	/* Actor currently in center view */
 	class AUsableItem* FocusedUsableActor;
-
-	/* Check if the character has an equipped gun*/
-	bool HasWeaponEquipped();
 
 private:
 	/* First person camera */
@@ -166,4 +170,12 @@ public:
 
 	/* Returns true when player is currently firing a gun */
 	bool IsFiring() const;
+
+	/* Check if the character has an equipped gun*/
+	//AGun* GetWeaponEquipped(EGunType Type);
+
+	/* Check if the character has an equipped gun*/
+	AGun* GetWeaponEquipped();
+
+	void AddGun(class AGun* Gun);
 };

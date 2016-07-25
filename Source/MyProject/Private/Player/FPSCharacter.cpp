@@ -59,9 +59,9 @@ AFPSCharacter::AFPSCharacter()
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	if (CurrentWeapon)
+	if (CurrentGun)
 	{
-		CurrentWeapon->SetOwningPlayer(this);
+		CurrentGun->SetOwningPlayer(this);
 	}
 }
 
@@ -219,9 +219,9 @@ void AFPSCharacter::OnStartFire()
 	if (MyPlayerController && MyPlayerController->IsGameActionAllowed())
 	{
 		bWantsToFire = true;
-		if (CurrentWeapon && bWantsToFire)
+		if (CurrentGun && bWantsToFire)
 		{
-			CurrentWeapon->StartWeaponFire();
+			CurrentGun->StartWeaponFire();
 		}
 	}
 }
@@ -229,16 +229,40 @@ void AFPSCharacter::OnStartFire()
 void AFPSCharacter::OnStopFire()
 {
 	bWantsToFire = false;
-	if (CurrentWeapon && !bWantsToFire)
+	if (CurrentGun && !bWantsToFire)
 	{
-		CurrentWeapon->StopWeaponFire();
+		CurrentGun->StopWeaponFire();
 	}
 }
 
-bool AFPSCharacter::HasWeaponEquipped()
+AGun* AFPSCharacter::GetWeaponEquipped()
 {
-	return CurrentWeapon != nullptr;
+	/*switch (Type)
+	{
+	case EGunType::Primary:
+	return CurrentGunPrimary;
+	case EGunType::Secondary:
+	return CurrentGunSecondary;
+	}*/
+
+	return CurrentGun;
 }
+
+void AFPSCharacter::AddGun(AGun* Gun)
+{
+
+}
+
+//AGun* AFPSCharacter::GetWeaponEquipped()
+//{
+//	switch (Type)
+//	{
+//	case EGunType::Primary:
+//		return CurrentGunPrimary;
+//	case EGunType::Secondary:
+//		return CurrentGunSecondary;
+//	}
+//}
 
 void AFPSCharacter::PickupItem()
 {
@@ -267,16 +291,16 @@ void AFPSCharacter::PickupItem()
 		// The item is a gun
 		if (UsableInView->IsA(AGun::StaticClass()))
 		{
+			AGun* WeaponInView = Cast<AGun>(UsableInView);
 			// check if character has a equipped gun
-			if (HasWeaponEquipped())
+			if (GetWeaponEquipped())
 			{
-				UE_LOG(GunLog, Log, TEXT("Weapon %s already equipped."), *CurrentWeapon->GetName());
+				UE_LOG(GunLog, Log, TEXT("Replacing with %s."), *WeaponInView->GetName());
 			}
 			else
 			{
-				AGun* WeaponInView = Cast<AGun>(UsableInView);
-				CurrentWeapon = WeaponInView;
-				UE_LOG(GunLog, Log, TEXT("Character has picked up %s"), *CurrentWeapon->GetName());
+				CurrentGun = WeaponInView;
+				UE_LOG(GunLog, Log, TEXT("Character has picked up %s."), *CurrentGun->GetName());
 			}
 		}
 	}

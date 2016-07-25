@@ -8,6 +8,7 @@ AInventoryItem::AInventoryItem()
 	// Create the static mesh component
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
 	RootComponent = PickupMesh;
+	PickupMesh->SetSimulatePhysics(true);
 }
 
 void AInventoryItem::OnUsed_Implementation(ACharacter* Character)

@@ -70,6 +70,7 @@ struct FWeaponSound
 	USoundBase* FireSingleSound3P;
 };
 
+UENUM()
 enum class EWeaponState
 {
 	Idle,
@@ -78,11 +79,20 @@ enum class EWeaponState
 	Equipping,
 };
 
+UENUM()
 enum class EFireMode
 {
 	Automatic,
 	Burst,
 	Single
+};
+
+/* Player has primary and/or secondary gun */
+UENUM()
+enum class EGunType
+{
+	Primary,
+	Secondary
 };
 
 UCLASS(Abstract, Blueprintable)

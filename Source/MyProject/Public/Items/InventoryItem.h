@@ -39,4 +39,7 @@ public:
 
 	/** Gets called when the UsableActor leaves the characters' sight */
 	void EndFocusItem_Implementation() override;
+
+	/** Return the mesh for the pickup */
+	FORCEINLINE class UStaticMeshComponent* GetMesh() const { return PickupMesh; }
 };
