@@ -113,7 +113,7 @@ protected:
 	FWeaponSound WeaponSounds;
 
 	/* Player currently owning this weapon */
-	class AFPSCharacter* OwningPawn;
+	ACharacter* OwningPawn;
 
 	/* If i would make this boolean, i would assign 1 byte to each boolean. Since this class will have a lot of this, i can save some space by creating bit fields of "uint32 booleans" */
 	uint32 bIsFiring : 1;
@@ -139,10 +139,6 @@ protected:
 	FVector MuzzleOffset;
 
 private:
-	/* Mesh first person */
-	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon Mesh")
-	USkeletalMeshComponent* Mesh1P;
-
 	/* Mesh third person */
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon Mesh")
 	USkeletalMeshComponent* Mesh3P;
@@ -158,10 +154,10 @@ public:
 	EWeaponState GetCurrentState() const;
 
 	/* Set the owning player */
-	void SetOwningPlayer(class AFPSCharacter* MyCharacter);
+	void SetOwningPawn(ACharacter* Character);
 
 	/* Return owner of the weapon */
-	class AFPSCharacter* GetOwningPlayer() const;
+	ACharacter* GetOwningPawn() const;
 
 	/* Player called event to start weapon fire */
 	void StartWeaponFire();
@@ -177,4 +173,7 @@ public:
 
 	/** Gets called when the UsableActor leaves the characters' sight */
 	void EndFocusItem_Implementation() override;
+
+	/** Spawn actor on character model */
+	void AttachToPawn();
 };

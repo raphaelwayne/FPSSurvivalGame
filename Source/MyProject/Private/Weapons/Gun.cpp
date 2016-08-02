@@ -7,21 +7,11 @@
 
 AGun::AGun()
 {
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh1P"));
-	// Only the player will see the mesh
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetOwnerNoSee(false);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	// Disable collision for the first person mesh
-	Mesh1P->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	RootComponent = Mesh1P;
-
 	Mesh3P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh3P"));
 	Mesh3P->CastShadow = true;
 	Mesh3P->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Mesh3P->SetSimulatePhysics(true);
-	Mesh3P->SetupAttachment(Mesh1P);
+	RootComponent = Mesh3P;
 
 	CurrentState = EWeaponState::Idle;
 	CurrentMode = EFireMode::Automatic;
@@ -37,12 +27,12 @@ EWeaponState AGun::GetCurrentState() const
 	return CurrentState;
 }
 
-void AGun::SetOwningPlayer(AFPSCharacter* MyCharacter)
+void AGun::SetOwningPawn(ACharacter* Character)
 {
-	OwningPawn = MyCharacter;
+	OwningPawn = Character;
 }
 
-AFPSCharacter* AGun::GetOwningPlayer() const
+ACharacter* AGun::GetOwningPawn() const
 {
 	return OwningPawn;
 }
@@ -105,8 +95,14 @@ void AGun::StopWeaponFire()
 
 void AGun::OnUsed_Implementation(ACharacter* Character)
 {
-	UE_LOG(GunLog, Log, TEXT("Weapon %s got picked up!"), *GetName());
-	Mesh3P->DestroyComponent();
+	if (Character)
+	{
+		UE_LOG(GunLog, Log, TEXT("Weapon %s got picked up!"), *GetName());
+		Mesh3P->CastShadow = false;
+		Mesh3P->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Mesh3P->SetSimulatePhysics(false);
+		AttachToPawn();
+	}
 }
 
 void AGun::StartFocusItem_Implementation()
@@ -117,4 +113,22 @@ void AGun::StartFocusItem_Implementation()
 void AGun::EndFocusItem_Implementation()
 {
 	Mesh3P->SetRenderCustomDepth(false);
+}
+
+void AGun::AttachToPawn()
+{
+	if (GetOwningPawn())
+	{
+		// Need to cast to AFPSCharacter to get a first person mesh
+		AFPSCharacter* Player = Cast<AFPSCharacter>(GetOwningPawn());
+		USkeletalMeshComponent* PawnMesh = Player->Get1PMesh();
+		if (PawnMesh)
+		{
+			//Mesh3P->AttachToComponent(PawnMesh, FAttachmentTransformRules::KeepWorldTransform, "GripPoint");
+			if (Mesh3P->AttachToComponent(PawnMesh, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint")))
+			{
+				UE_LOG(GunLog, Log, TEXT("Gun %s got successfully attached."), *GetName());
+			}
+		}
+	}
 }

@@ -168,6 +168,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerAbility")
 	void PickupItem();
 
+	FORCEINLINE USkeletalMeshComponent* Get1PMesh() const { return FirstPersonMesh; }
+
 	/* Returns true when player is currently firing a gun */
 	bool IsFiring() const;
 

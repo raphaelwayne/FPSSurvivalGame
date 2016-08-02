@@ -22,7 +22,7 @@ public:
 
 	/** Gets called when the Character calls the Use function */
 	UFUNCTION(BlueprintNativeEvent, Category = "Inventory")
-	void OnUsed(ACharacter* Character);
+	void OnUsed(ACharacter* InstigatorPawn);
 
 	/** Gets called when the UsableActor is in the charaters' sight */
 	UFUNCTION(BlueprintNativeEvent, Category = "Item")

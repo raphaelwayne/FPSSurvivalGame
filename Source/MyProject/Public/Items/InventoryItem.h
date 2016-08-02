@@ -32,7 +32,7 @@ public:
 	FItemDisplayProperties GetItemProperties() { return ItemProperties; }
 
 	/** Gets called when the Character calls the Use function */
-	void OnUsed_Implementation(ACharacter* Character) override;
+	void OnUsed_Implementation(ACharacter* InstigatorPawn) override;
 
 	/** Gets called when the UsableActor is in the charaters' sight */
 	void StartFocusItem_Implementation() override;

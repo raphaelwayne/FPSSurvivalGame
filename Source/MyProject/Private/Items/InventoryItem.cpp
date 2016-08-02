@@ -11,7 +11,7 @@ AInventoryItem::AInventoryItem()
 	PickupMesh->SetSimulatePhysics(true);
 }
 
-void AInventoryItem::OnUsed_Implementation(ACharacter* Character)
+void AInventoryItem::OnUsed_Implementation(ACharacter* InstigatorPawn)
 {
 	UE_LOG(ItemLog, Log, TEXT("Item %s got picked up!"), *GetName());
 	PickupMesh->DestroyComponent();

@@ -2,16 +2,18 @@
 
 #pragma once
 
-#include "Items/UsableItem.h"
-#include "WeaponPickup.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "WeaponWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT_API AWeaponPickup : public AUsableItem
+class MYPROJECT_API UWeaponWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
+	
 	
 	
 };

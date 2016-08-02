@@ -15,8 +15,6 @@ class MYPROJECT_API AConsumableItem : public AInventoryItem
 	GENERATED_BODY()
 	
 public:
-	AConsumableItem();
-	
 	// Event to call when consuming
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Consumable Events")
 	void OnConsumed(ACharacter* Invoker);

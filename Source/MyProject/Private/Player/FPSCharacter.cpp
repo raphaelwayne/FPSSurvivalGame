@@ -30,7 +30,11 @@ AFPSCharacter::AFPSCharacter()
 	FirstPersonMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// Everyone but the player will see the regular body mesh
+	GetMesh()->SetOnlyOwnerSee(false);
 	GetMesh()->SetOwnerNoSee(true);
+	GetMesh()->bCastHiddenShadow = true;
+	GetMesh()->bCastDynamicShadow = true;
+	GetMesh()->CastShadow = true;
 
 	// Add the inventory component
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
@@ -61,7 +65,7 @@ void AFPSCharacter::BeginPlay()
 	Super::BeginPlay();
 	if (CurrentGun)
 	{
-		CurrentGun->SetOwningPlayer(this);
+		CurrentGun->SetOwningPawn(this);
 	}
 }
 
@@ -151,7 +155,7 @@ AUsableItem* AFPSCharacter::GetUsableInView()
 	if (GetWorld())
 	{
 		// Returns true if the trace found somethign
-		bTraceFound = GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_GameTraceChannel1, TraceParams);
+		bTraceFound = GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, COLLISION_USABLE, TraceParams);
 		if (bTraceFound)
 		{
 			//print("Trace hit: " + Hit.GetActor()->GetName());
@@ -300,6 +304,8 @@ void AFPSCharacter::PickupItem()
 			else
 			{
 				CurrentGun = WeaponInView;
+				CurrentGun->SetOwningPawn(this);
+				CurrentGun->OnUsed(this);
 				UE_LOG(GunLog, Log, TEXT("Character has picked up %s."), *CurrentGun->GetName());
 			}
 		}
