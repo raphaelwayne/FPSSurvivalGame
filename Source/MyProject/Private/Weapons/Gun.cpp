@@ -46,13 +46,13 @@ void AGun::StartWeaponFire()
 		// Get the camera transformations
 		FVector CameraLoc;
 		FRotator CameraRot;
-		GetActorEyesViewPoint(CameraLoc, CameraRot);
+		GetOwningPawn()->GetActorEyesViewPoint(CameraLoc, CameraRot);
 		// MuzzleOffset is in camera space, so transform it to world space before offsetting 
 		// from the camera to find the final muzzle position
-		FVector const MuzzleLocation = CameraLoc + FTransform(CameraRot).TransformVector(MuzzleOffset);
+		MuzzleLocation = Mesh3P->GetSocketLocation("Muzzle");
 		FRotator MuzzleRotation = CameraRot;
 		// Skew the aim a bit upwards
-		MuzzleRotation.Pitch += 10.f;
+		MuzzleRotation.Pitch += 1.f;
 		UWorld* const World = OwningPawn->GetWorld();
 		if (World)
 		{

@@ -136,7 +136,7 @@ protected:
 
 	/* Gun muzzle's offset from the FPSCamera */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
-	FVector MuzzleOffset;
+	FVector MuzzleLocation;
 
 private:
 	/* Mesh third person */

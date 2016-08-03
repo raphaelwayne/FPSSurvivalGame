@@ -257,17 +257,6 @@ void AFPSCharacter::AddGun(AGun* Gun)
 
 }
 
-//AGun* AFPSCharacter::GetWeaponEquipped()
-//{
-//	switch (Type)
-//	{
-//	case EGunType::Primary:
-//		return CurrentGunPrimary;
-//	case EGunType::Secondary:
-//		return CurrentGunSecondary;
-//	}
-//}
-
 void AFPSCharacter::PickupItem()
 {
 	AUsableItem* UsableInView = Cast<AUsableItem>(GetUsableInView());
