@@ -118,12 +118,16 @@ protected:
 	/* If i would make this boolean, i would assign 1 byte to each boolean. Since this class will have a lot of this, i can save some space by creating bit fields of "uint32 booleans" */
 	uint32 bIsFiring : 1;
 	
+	/* Is weapon reloading? */
 	uint32 bIsReloading : 1;
 
+	/* Is weapon doing nothing? */
 	uint32 bIsIdling : 1;
 
+	/* Is weapon equipped? */
 	uint32 bIsEquipped : 1;
 
+	/* Is weapon firing? */
 	uint32 bWantsToFire : 1;
 
 	EWeaponState CurrentState;
@@ -137,6 +141,9 @@ protected:
 	/* Gun muzzle's offset from the FPSCamera */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector MuzzleLocation;
+
+	/* TimerHandle for firing the gun */
+	FTimerHandle TimerHandle_HandleWeaponFire;
 
 private:
 	/* Mesh third person */
@@ -158,6 +165,12 @@ public:
 
 	/* Return owner of the weapon */
 	ACharacter* GetOwningPawn() const;
+
+	/* Set (or don't set) a timer handle to simulate single/burst/automatic weapon fire */
+	void StartSimulateWeaponFire();
+
+	/* Clear timer handle and stop weapon fire */
+	void StopSimulateWeaponFire();
 
 	/* Player called event to start weapon fire */
 	void StartWeaponFire();

@@ -15,6 +15,11 @@ AGun::AGun()
 
 	CurrentState = EWeaponState::Idle;
 	CurrentMode = EFireMode::Automatic;
+
+	WeaponProperties.FireRate = 0.f;
+	WeaponProperties.ClipAmmo = 30.f;
+	WeaponProperties.InitialClips = 0.f;
+	WeaponProperties.MaxAmmo = 30.f;
 }
 
 EFireMode AGun::GetCurrentMode() const
@@ -37,12 +42,27 @@ ACharacter* AGun::GetOwningPawn() const
 	return OwningPawn;
 }
 
+void AGun::StartSimulateWeaponFire()
+{
+	// Attach timer handle to world timer
+	bWantsToFire = true;
+	CurrentState = EWeaponState::Firing;
+	GetWorldTimerManager().SetTimer(TimerHandle_HandleWeaponFire, this, &AGun::StartWeaponFire, WeaponProperties.FireRate, false);
+}
+
+void AGun::StopSimulateWeaponFire()
+{
+	// Clear the timer
+	bWantsToFire = false;
+	CurrentState = EWeaponState::Idle;
+	GetWorldTimerManager().ClearTimer(TimerHandle_HandleWeaponFire);
+}
+
 void AGun::StartWeaponFire()
 {
 	// Check if there is a projectile to shoot
-	if (Projectile)
+	if (OwningPawn && Projectile && bWantsToFire)
 	{
-		bWantsToFire = true;
 		// Get the camera transformations
 		FVector CameraLoc;
 		FRotator CameraRot;
@@ -76,15 +96,22 @@ void AGun::StartWeaponFire()
 		}
 
 		//// try and play a firing animation if specified
-		//if (WeaponAnimations.Animation1P)
-		//{
-		//	// Get the animation object for the arms mesh
-		//	UAnimInstance* AnimInstance = FirstPersonMesh->GetAnimInstance();
-		//	if (AnimInstance != NULL)
-		//	{
-		//		AnimInstance->Montage_Play(WeaponAnimations.Animation1P, 1.f);
-		//	}
-		//}
+		if (WeaponAnimations.Animation1P)
+		{
+			// Get the animation object for the arms mesh
+			AFPSCharacter* Player = Cast<AFPSCharacter>(GetOwningPawn());
+			USkeletalMeshComponent* PawnMesh = Player->Get1PMesh();
+			UAnimInstance* AnimInstance = PawnMesh->GetAnimInstance();
+			if (AnimInstance)
+			{
+				AnimInstance->Montage_Play(WeaponAnimations.Animation1P, 1.f);
+			}
+		}
+
+		if (CurrentState == EWeaponState::Firing && WeaponProperties.FireRate > 0.f)
+		{
+			GetWorldTimerManager().SetTimer(TimerHandle_HandleWeaponFire, this, &AGun::StartWeaponFire, WeaponProperties.FireRate, false);
+		}
 	}
 }
 
@@ -128,6 +155,7 @@ void AGun::AttachToPawn()
 			if (Mesh3P->AttachToComponent(PawnMesh, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint")))
 			{
 				UE_LOG(GunLog, Log, TEXT("Gun %s got successfully attached."), *GetName());
+				bIsEquipped = true;
 			}
 		}
 	}

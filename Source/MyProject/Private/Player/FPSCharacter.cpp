@@ -225,7 +225,8 @@ void AFPSCharacter::OnStartFire()
 		bWantsToFire = true;
 		if (CurrentGun && bWantsToFire)
 		{
-			CurrentGun->StartWeaponFire();
+			UE_LOG(GunLog, Log, TEXT("FIRE"));
+			CurrentGun->StartSimulateWeaponFire();
 		}
 	}
 }
@@ -235,7 +236,7 @@ void AFPSCharacter::OnStopFire()
 	bWantsToFire = false;
 	if (CurrentGun && !bWantsToFire)
 	{
-		CurrentGun->StopWeaponFire();
+		CurrentGun->StopSimulateWeaponFire();
 	}
 }
 
